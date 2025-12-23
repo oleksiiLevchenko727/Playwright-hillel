@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import  config  from './config/config';
 
 
 export default defineConfig({
@@ -9,11 +10,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-   baseURL: 'https://qauto.forstudy.space',
-   httpCredentials: {
-      username: 'guest',
-      password: 'welcome2qauto',
-    },
+   baseURL: config.baseURL,
+   httpCredentials: config.httpCredentials,
     trace: 'on-first-retry',
   },
   

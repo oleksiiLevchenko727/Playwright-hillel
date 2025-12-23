@@ -6,7 +6,7 @@ import {faker} from '@faker-js/faker'
 
 test.describe('The login/signUp tests with valid and invalid credentials', () => {
   test.beforeEach(async ({ page }) => {
-  const response = await page.goto('/');
+  const response = await page.goto('');
   expect(response?.ok()).toBeTruthy();
   });
 
@@ -305,4 +305,3 @@ test('Should try to create a new account with different second password', async 
 });
  
 });
-
