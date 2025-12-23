@@ -30,7 +30,7 @@ class SigInFormPage {
         this.errorMessage = page.locator('.invalid-feedback');
   } 
 
-    async loginWithValidCredentials(  {email, password}: {email: string, password: string}) {
+    async loginWithValidCredentials({email, password}: {email: string, password: string}) {
         await this.signInButton.click()
         await this.emailField.fill(email)
         await this.passwordField.fill(password)
@@ -38,22 +38,13 @@ class SigInFormPage {
         await expect(this.logoutButton).toBeVisible()
     }
 
-    async signUpForm({firstName, lastName, email, password}: {firstName: string, lastName: string, email: string, password: string}) {
+    async signUpForm({firstName, lastName, email, password, repeatPassword}: {firstName: string, lastName: string, email: string, password: string, repeatPassword: string}) {
         await this.signUpButton.click()
         await this.firstNameField.fill(firstName)
         await this.lastNameField.fill(lastName)
         await this.emailField.fill(email)
         await this.passwordField.fill(password)
         await this.reEnterPasswordField.fill(password)
-    }
-
-        async signUpFormWithDifferentSecondPassword({firstName, lastName, email, password, secondPassword}: {firstName: string, lastName: string, email: string, password: string, secondPassword: string}) {
-        await this.signUpButton.click()
-        await this.firstNameField.fill(firstName)
-        await this.lastNameField.fill(lastName)
-        await this.emailField.fill(email)
-        await this.passwordField.fill(password)
-        await this.reEnterPasswordField.fill(secondPassword)
     }
  
 }
