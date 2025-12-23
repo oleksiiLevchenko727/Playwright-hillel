@@ -300,7 +300,7 @@ test('Should try to create a new account with different second password', async 
                                          memorable: false,
                                          pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
   })}`});
-  await expect(page.locator('.invalid-feedback')).toBeVisible();
+  await expect(page.locator('[type="button"][class="btn btn-primary"]', { hasText: 'Register' })).toBeDisabled();
 
 });
  
