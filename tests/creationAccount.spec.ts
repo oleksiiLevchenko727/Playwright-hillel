@@ -1,7 +1,6 @@
-import { test, expect, Page } from '@playwright/test';
-import { SigInFormPage } from '../src/page-object/signInPage'; 
+import { test, expect } from '@playwright/test';
 import { Creds } from '../fixtures/creds.ts';
-import {faker} from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
 
 
 test.describe('The login/signUp tests with valid and invalid credentials', () => {
@@ -11,296 +10,489 @@ test.describe('The login/signUp tests with valid and invalid credentials', () =>
   });
 
 test('Should authorize with valid credentials', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.loginWithValidCredentials({email: Creds.login.email, password: Creds.login.password});
+        const signInButton = page.locator('button[class*="header_signin"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const registrationButton = page.locator('button[type="button"][class*="primary"]');
+        const logoutButton = page.locator('[class*="text-danger"]');
+
+        await signInButton.click()
+        await emailField.fill(Creds.login.email)
+        await passwordField.fill(Creds.login.password)
+        await registrationButton.click()
+        await expect(logoutButton).toBeVisible()
+
 });
 
 test('Should create a new account with valid credentials', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const registrationButton = page.locator('button[type="button"][class*="primary"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
-  await signInPage.registrationButton.click();
+  })}`;
+
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
+  await registrationButton.click();
   await expect(page.locator('[class*="text-danger"]')).toBeVisible();
 });
 
 test('Should try to create a new account with empty first name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName:'',
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill('');
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with short first name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: Creds.signUp.shortName,
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
-  await expect(page.locator('[class="invalid-feedback"]')).toBeVisible();
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(Creds.signUp.shortName);
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
+  await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with long first name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.lorem.paragraph(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.lorem.paragraph());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with invalid first name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: `5#${faker.internet.password()}`,
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(`5#${faker.internet.password()}`);
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account spaced first name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: `   ${faker.person.firstName()}   `,
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(`   ${faker.person.firstName()}   `);
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with empty last name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName:  faker.person.firstName(),
-                               lastName: '',
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill('');
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with short last name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: Creds.signUp.shortName,
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(Creds.signUp.shortName);
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with long last name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.lorem.paragraph(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.lorem.paragraph());
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with invalid last name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName:faker.internet.password(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(`5#${faker.internet.password()}`);
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account spaced last name', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: `   ${faker.person.lastName()}   `,
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(`   ${faker.person.lastName()}   `);
+  await emailField.fill(`aqa-${faker.internet.email()}`);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with empty email', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: '',
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill('');
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with invalid email', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: faker.lorem.word(5),
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.lorem.word(5));
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with spaced email', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `   ${faker.internet.email()}   `,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(`  ${faker.internet.email()}  `);
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with empty password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName:  faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: ''});
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
+                                         length: 12,
+                                         memorable: false,
+                                         pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill('');
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with short password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `${faker.internet.password({
-                                         length: 7,
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
+                                         length: 5,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with long password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 21,
                                          memorable: false,
                                          pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with small letters password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `i5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[a-z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with big letters password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Z0-9!@#$%^&*()_+=-]/,
-  })}`});
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with password without numbers', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `${faker.internet.password({
                                          length: 12,
                                          memorable: false,
-                                         pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
-  })}`});
+                                         pattern: /[A-Za-z!@#$%^&*()_+=-]/,
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with spaced password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpForm({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: ` i5${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `${faker.internet.password({
                                          length: 12,
                                          memorable: false,
-                                         pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
-  })} `});
+                                         pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(`  ${password}  `);
+  await reEnterPasswordField.fill(password);
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
 test('Should try to create a new account with different second password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpFormWithDifferentSecondPassword({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
-                                         length: 8,
-                                         memorable: false,
-                                         pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
-  })}`,
-                               secondPassword: `i3${faker.internet.password({
+        const signUpButton = page.locator('button[class*="btn-primary"]');
+        const firstNameField = page.locator('input[name="name"]');
+        const lastNameField = page.locator('input[name="lastName"]');
+        const emailField = page.locator('input[name="email"]');
+        const passwordField = page.locator('input[name="password"]');
+        const reEnterPasswordField = page.locator('input[name="repeatPassword"]');
+        const password = `${faker.internet.password({
                                          length: 12,
                                          memorable: false,
-                                         pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
-  })}`});
-  await expect(page.locator('.invalid-feedback')).toBeVisible();
+                                         pattern: /[A-Za-z0-9!@#$%^&*()_+=-]/,
+  })}`;
+       const repeatPassword = `i3${faker.internet.password({
+                                         length: 9,
+                                         memorable: false,
+                                         pattern: /[A-Za-z!@#$%^&*()_+=-]/,
+  })}`;
+  await signUpButton.click();
+  await firstNameField.fill(faker.person.firstName());
+  await lastNameField.fill(faker.person.lastName());
+  await emailField.fill(faker.internet.email());
+  await passwordField.fill(password);
+  await reEnterPasswordField.fill(repeatPassword);
+  await expect(page.locator('[type="button"][class="btn btn-primary"]', { hasText: 'Register' })).toBeDisabled();
+
 
 });
  
