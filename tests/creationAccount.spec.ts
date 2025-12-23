@@ -287,7 +287,7 @@ test('Should try to create a new account with spaced password', async ({ page })
 
 test('Should try to create a new account with different second password', async ({ page }) => {
   const signInPage = new SigInFormPage(page);
-  await signInPage.signUpFormWithDifferentSecondPassword({firstName: faker.person.firstName(),
+  await signInPage.signUpForm({firstName: faker.person.firstName(),
                                lastName: faker.person.lastName(),
                                email: `aqa-${faker.internet.email()}`,
                                password: `i5${faker.internet.password({
@@ -295,7 +295,7 @@ test('Should try to create a new account with different second password', async 
                                          memorable: false,
                                          pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
   })}`,
-                               secondPassword: `i3${faker.internet.password({
+                               repeatPassword: `i3${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
