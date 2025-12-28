@@ -10,25 +10,46 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-   baseURL: config.baseURL,
-   httpCredentials: config.httpCredentials,
+    baseURL: config.baseURL,
+    httpCredentials: config.httpCredentials,
     trace: 'on-first-retry',
   },
   
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
+          name: 'setup',
+          testMatch: /\/tests\/setup\/.*\.setup\.js/,
+          use: { ...devices['Desktop Chrome'] },
+      },
+      {
+          name: 'smoke',
+          dependencies: ['setup'],
+          grep: /@my-label/,
+          use: {
+              ...devices['Desktop Chrome'],
+                viewport: { width: 1920, height: 1080 },
+              trace: 'on',
+              screenshot: {
+                  fullPage: true,
+                  mode: "on"
+              },
+          },
+      },
 
     // {
     //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
+    //   use: { 
+    //   ...devices['Desktop Firefox'] 
+    //   },
+    //   storageState: 'playwright/.auth/user.json',
     // },
 
     // {
     //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
+    //   use: { 
+    //   ...devices['Desktop Safari'] 
+    //   },
+    //   storageState: 'playwright/.auth/user.json',
     // },
   ],
 
