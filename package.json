@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:setup": "npx playwright test --project=setup",
+    "test:smoke": "npx playwright test --project=smoke",
     "test": "playwright test --project=chromium",
     "test:firefox": "playwright test --project=firefox",
     "test:webkit": "playwright test --project=webkit"
