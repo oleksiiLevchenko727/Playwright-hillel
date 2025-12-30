@@ -9,13 +9,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build and run Playwright tests
         run: docker-compose up --build --abort-on-container-exit --exit-code-from playwright
 
       - name: Upload screenshots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: test-results/screenshots
