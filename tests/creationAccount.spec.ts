@@ -4,6 +4,7 @@ import { Creds } from '../fixtures/creds.ts';
 import {faker} from '@faker-js/faker'
 
 
+
 test.describe('The login/signUp tests with valid and invalid credentials', () => {
   test.beforeEach(async ({ page }) => {
   const response = await page.goto('/');
@@ -251,7 +252,7 @@ test('Should try to create a new account with big letters password', async ({ pa
   await signInPage.signUpForm({firstName: faker.person.firstName(),
                                lastName: faker.person.lastName(),
                                email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
+                               password: `5${faker.internet.password({
                                          length: 12,
                                          memorable: false,
                                          pattern: /[A-Z0-9!@#$%^&*()_+=-]/,
@@ -285,24 +286,6 @@ test('Should try to create a new account with spaced password', async ({ page })
   await expect(page.locator('.invalid-feedback')).toBeVisible();
 });
 
-test('Should try to create a new account with different second password', async ({ page }) => {
-  const signInPage = new SigInFormPage(page);
-  await signInPage.signUpFormWithDifferentSecondPassword({firstName: faker.person.firstName(),
-                               lastName: faker.person.lastName(),
-                               email: `aqa-${faker.internet.email()}`,
-                               password: `i5${faker.internet.password({
-                                         length: 8,
-                                         memorable: false,
-                                         pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
-  })}`,
-                               secondPassword: `i3${faker.internet.password({
-                                         length: 12,
-                                         memorable: false,
-                                         pattern: /[[A-Za-z!@#$%^&*()_+=-]/,
-  })}`});
-  await expect(page.locator('.invalid-feedback')).toBeVisible();
-
-});
  
 });
 

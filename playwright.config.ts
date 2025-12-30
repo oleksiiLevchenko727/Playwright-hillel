@@ -15,6 +15,8 @@ export default defineConfig({
       password: 'welcome2qauto',
     },
     trace: 'on-first-retry',
+      headless: true, 
+      screenshot: 'on',
   },
   
   projects: [
