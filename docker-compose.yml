@@ -1,21 +1,10 @@
-name: Playwright Tests
+version: "3.9"
 
-on:
-  push:
-    branches:
-      - feat-github-actions
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build and run Playwright tests
-        run: docker-compose up --build --abort-on-container-exit --exit-code-from playwright
-
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshots
-          path: test-results/screenshots
+services:
+  playwright:
+    build: .
+    container_name: playwright-tests
+    volumes:
+      - ./test-results:/tests/test-results
+    environment:
+      CI: "true"
